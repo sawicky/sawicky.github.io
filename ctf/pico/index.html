@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Pico CTF | sawicky&#39;s space</title>
+  <meta name="author" content="David Sawick">
+
+  
+  <meta name="description" content="picoCTF Web Exploitation ReflectionsInspect Me (125 pts)Incredibly basic, just view source of web page for part 1 of flag, then inspect the attached .">
+  
+  
+
+  <link rel="alternate" href="/atom.xml" title="sawicky&#39;s space" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head></html>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">home</a></li>
+    
+      <li><a href="/archives">archive</a></li>
+    
+      <li><a href="/tags">tags</a></li>
+    
+      <li><a href="/ctf">ctf</a></li>
+    
+      <li><a href="/about">about</a></li>
+    
+      <li><a href="/portfolio">portfolio</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="page">
+  
+  <header>
+    
+  
+    <h1 class="title">Pico CTF</h1>
+  
+
+    
+  </header>
+  <div class="entry-content">
+    
+      <h2 id="picoCTF-Web-Exploitation-Reflections"><a href="#picoCTF-Web-Exploitation-Reflections" class="headerlink" title="picoCTF Web Exploitation Reflections"></a>picoCTF Web Exploitation Reflections</h2><h2 id="Inspect-Me-125-pts"><a href="#Inspect-Me-125-pts" class="headerlink" title="Inspect Me (125 pts)"></a>Inspect Me (125 pts)</h2><p>Incredibly basic, just view source of web page for part 1 of flag, then inspect the attached .js and .css scripts for part 2 and 3</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;ur_4_real_1nspect0r_g4dget_e96dd105</span><br></pre></td></tr></table></figure>
+<h2 id="Client-Side-is-Still-Bad-150pts"><a href="#Client-Side-is-Still-Bad-150pts" class="headerlink" title="Client Side is Still Bad (150pts)"></a>Client Side is Still Bad (150pts)</h2><p>Using inspect source again, flag is provided in plain text and password is verified client side.<br><img src="/media/images/clientside.png" alt=""><br>Rejoin the split text to form the flag:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;client_is_bad_5e06ac&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Logon-150pts"><a href="#Logon-150pts" class="headerlink" title="Logon (150pts)"></a>Logon (150pts)</h2><p>This one threw me off a little bit, as being the 3rd in series for Web Exploitaion you’d expect to be quite easy. I gained this flag by simply editing the cookie parameter of the ‘admin’ field to True instead of False. I know this was not the solution, as this is the solution for a later challenge but it still worked.</p>
+<p>The cookie was edited using a Cookie Editor extension for chromium based browsers<br><a href="/media/images/huge-cheat.png"><img src="/media/images/body-cheat.png" alt="Click this link for full size image" title="Logon Challenge2"></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;l0g1ns_ar3nt_r34l_82e795f4&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Irish-Name-Repo-200-pts"><a href="#Irish-Name-Repo-200-pts" class="headerlink" title="Irish Name Repo (200 pts)"></a>Irish Name Repo (200 pts)</h2><p>Very simple SQL injection attack, as the hint suggested profiles were kept in a database. Used the most basic injection:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&apos; OR 1=1;--</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;con4n_r3411y_1snt_1r1sh_8cf1b7e7&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Mr-Robots-200pts"><a href="#Mr-Robots-200pts" class="headerlink" title="Mr. Robots (200pts)"></a>Mr. Robots (200pts)</h2><p>The name of this challenge reveals the answer - The robots.txt file provides web crawlers some parameters used in SEO, aswell as ‘asking’ a robot not to visit a specific page.<br>The robots.txt file of this challenge provided a hidden web page: <a href="http://2018shell.picoctf.com:10157/143ce.html" target="_blank" rel="noopener">http://2018shell.picoctf.com:10157/143ce.html</a></p>
+<p>This page reveals the flag.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;th3_w0rld_1s_4_danger0us_pl4c3_3lli0t_143ce&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="No-Login-200-pts"><a href="#No-Login-200-pts" class="headerlink" title="No Login (200 pts)"></a>No Login (200 pts)</h2><p>This is the challenge that I accidently solved for an earlier challenge. It seems this one uses the same cookies as Logon (150pts), which means the flag was revealed to me immediately, as I have already changed the Admin parameter of the cookie to true;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;n0l0g0n_n0_pr0bl3m_ed714e0e&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Secret-Agent-200-pts"><a href="#Secret-Agent-200-pts" class="headerlink" title="Secret Agent(200 pts)"></a>Secret Agent(200 pts)</h2><p>The hint is in the name of this challenge and the hint - What part of the browser identifies you, and how can you pretend to be someone else?<br>This part is the User Agent, and a quick google search of how to spoof the user agent (can be done in Developer Tools of chromium), as well as reading the failure message when you attempt to get the flag (You’re not google!) will lead you into spoofing your browser to have the GoogleBot User agent.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;s3cr3t_ag3nt_m4n_ac87e6a7&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Buttons-250pts"><a href="#Buttons-250pts" class="headerlink" title="Buttons(250pts)"></a>Buttons(250pts)</h2><p>This simple php application begins with a button. When you click that button, you are taken to another page with a second button. If you click this button, you get rickrolled.</p>
+<p>The hint suggests that the buttons are different, so we need to inspect the source code to find out how:<br><a href="/media/images/huge-Buttons1.png"><img src="/media/images/body-Buttons1.png" alt="Click this link for full size image" title="Buttons"></a></p>
+<p>Button 1 seems to be within a form with a POST action. Nothing wrong here</p>
+<a href="/media/images/huge-Buttons2.png"><img src="/media/images/body-Buttons2.png" alt="Click this link for full size image" title="Buttons"></a>
+<p>Button 2 seems to just be a hyperlink. What?? How are we meant to pretend as though Button 2 is a POST form?</p>
+<p>I used an application called Postman (which used to be a browser extension) to forcefully send a POST request to the button2.php page, instead of treating it as a hyperlink</p>
+<p>The response of the POST request returned the flag</p>
+<a href="/media/images/huge-postman.png"><img src="/media/images/body-postman.png" alt="Click this link for full size image" title="Buttons"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;button_button_whose_got_the_button_3e5652dd&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="The-Vault-250pts"><a href="#The-Vault-250pts" class="headerlink" title="The Vault (250pts)"></a>The Vault (250pts)</h2><p>This is the first challenge that I found challenging. It is a simple login form with the PHP code provided that also checks for SQL Injections.</p>
+<p>Upon opening this challenge, you are given a link to view the source code:<br><a href="/media/images/huge-vault1.png"><img src="/media/images/body-vault1.png" alt="Click this link for full size image" title="Buttons"></a></p>
+<p>You can see that when you submit information via the post, it first sanitizes any attempt at XSS via the htmlspecialchars() method, which is a common PHP method for sanitzation.<br>It then checks to see if either your username matches the REGEX pattern, which evaluates to ‘ OR or “ OR<br>If either of your inputs contains that string, then the preg_match() method returns true, or 1, and the code then checks if any of your inputs scored 1 or above, which would indicate one of those fields containing the filtered REGEX pattern, indicating an SQL attack. </p>
+<p>After much tinkering with various SQL statements, forced POSTs using Postman, it dawned on me that you can escape an SQL query without using OR if you already knew one of the inputs.<br>So, I guessed that the username was ‘admin’, and then escaped the rest of the query using ‘;–<br>Logging in with admin’;– and any password provided the flag.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">picoCTF&#123;w3lc0m3_t0_th3_vau1t_c4738171&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Artisinal-Handcrafted-HTTP-3-300pts"><a href="#Artisinal-Handcrafted-HTTP-3-300pts" class="headerlink" title="Artisinal Handcrafted HTTP 3 (300pts)"></a>Artisinal Handcrafted HTTP 3 (300pts)</h2><p>This challenge directs us to use ‘nc’ or Ncat to connect to 2018shell.picoctf.com using port 38686, and attempt to handcraft a HTTP request in order to find the flag.<br>Unfortuantely, I get a connection refused if I attempt this on a host or guest machine, and may have to come back to this later because I don’t think this is intended. </p>
+<a href="/media/images/huge-nc1.png"><img src="/media/images/body-nc1.png" alt="Click this link for full size image" title="Buttons"></a>
+    
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2019 David Sawick
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/js/phasebeam.js"></script>
+</body>
+</html>

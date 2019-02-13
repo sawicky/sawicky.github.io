@@ -4,11 +4,69 @@
   
     
     <entry>
+      <title>CTF Training</title>
+      <link href="/2019/02/13/CTF-Training/"/>
+      <url>/2019/02/13/CTF-Training/</url>
+      
+        <content type="html"><![CDATA[<h2 id="CTF-Training"><a href="#CTF-Training" class="headerlink" title="CTF Training"></a>CTF Training</h2><h5 id="February-9-2019-1-52-PM"><a href="#February-9-2019-1-52-PM" class="headerlink" title="February 9, 2019, 1:52 PM"></a>February 9, 2019, 1:52 PM</h5><p>For this weeks studio progress, I decided to start upon some CTFs and try and start from scratch. My progress is logged <a href="/ctf/">here</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> security </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> security </tag>
+            
+            <tag> training </tag>
+            
+            <tag> ctf </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>SSL-on-Github-Pages</title>
+      <link href="/2019/02/13/SSL-on-Github-Pages/"/>
+      <url>/2019/02/13/SSL-on-Github-Pages/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Installing-SSL-on-a-Github-Gitlab-pages-static-webpage"><a href="#Installing-SSL-on-a-Github-Gitlab-pages-static-webpage" class="headerlink" title="Installing SSL on a Github/Gitlab pages static webpage"></a>Installing SSL on a Github/Gitlab pages static webpage</h2><h5 id="February-6-2019-12-37-PM"><a href="#February-6-2019-12-37-PM" class="headerlink" title="February 6, 2019, 12:37 PM"></a>February 6, 2019, 12:37 PM</h5><p>Github offers a student education pack, and within that pack also offers 1 free year’s registration on a customized .me TLD alongside a free year of SSL certification.<br>Sounds great right?<br>The problem is, Github is not a web hosting platform and only hosts static web pages at a bare minimum capacity, which means theres no real way to use that SSL certification if you’re using Github hosting. </p><p>You’re going to have to rely on some other service to provide an SSL redirect for you, which namecheap doesn’t provide. </p><p>One such service is Cloudflare, which lets you register a single website for free, which will provide a SSL activated nameserver for your domain, which means for a browser to connect your websites name to an IP address, It’ll ask Cloudflare first.</p><ol><li>Register an account for Cloudflare <a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">here</a></li><li>Put your .me or .github.io link in the next box<br><img src="/media/images/addsite.jpg" alt="Add your site here"></li><li><p>Let CloudFlare scan current DNS records associated with the domain name, and confirm if they look correct (Look at your Namecheap panel to confirm)</p></li><li><p>Click the free plan, and continue once you see the new records it will apply</p></li><li><p>CloudFlare will then give you 2 nameservers that you’ll need to apply to your registrar (Namecheap in this case) so name resolution requests will go through CloudFlare services instead<br><img src="/media/images/ns.jpg" alt="Your actual nameserver names may be different"></p></li><li><p>Now, pop over to your Namecheap control panel Advanced DNS section<br><img src="/media/images/record.jpg" alt=""></p></li><li><p>Now, replace every CNAME and A record currenty in (but leave MX alone) with this: </p><ul><li>A record for @ pointing to 185.199.108.153 </li><li>A record for @ pointing to 185.199.109.153 </li><li>A record for @ pointing to 185.199.110.153 </li><li>A record for @ pointing to 185.199.111.153 </li><li>CNAME record for www pointing to your username.github.io or username.me domain</li></ul></li><li><p>Save your progress, and head on over to the Nameservers section in your control panel<br><img src="/media/images/editns.jpg" alt=""></p></li><li><p>Choose Custom DNS, and enter the 2 CloudFlare nameservers that were given to you earlier<br><img src="/media/images/editns2.jpg" alt=""></p></li><li><p>After this, you should be all done! Nameserver updates take around an hour, but eventually you’ll be able to access your .me domain with SSL enabled</p></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tutorials </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SSL </tag>
+            
+            <tag> Github </tag>
+            
+            <tag> Hosting </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>rokrat</title>
       <link href="/2019/02/13/rokrat/"/>
       <url>/2019/02/13/rokrat/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h2 id="CVE-2018-4877-and-the-ROKRAT-Payload"><a href="#CVE-2018-4877-and-the-ROKRAT-Payload" class="headerlink" title="CVE-2018-4877 and the ROKRAT Payload"></a>CVE-2018-4877 and the ROKRAT Payload</h2><h5 id="February-5-2019-5-17-PM"><a href="#February-5-2019-5-17-PM" class="headerlink" title="February 5, 2019, 5:17 PM"></a>February 5, 2019, 5:17 PM</h5><p>We started our Summer Studio on Cyber Security by presenting our own research on a recently exploited vulnerability, it’s avenues of attack, it’s impact and it’s remediation.</p><h3 id="Adobe-Flash-Exploit-CVE-2018-4877"><a href="#Adobe-Flash-Exploit-CVE-2018-4877" class="headerlink" title="Adobe Flash Exploit CVE-2018-4877"></a>Adobe Flash Exploit CVE-2018-4877</h3><p>The CVE-2018-4877 exploit was first reported on the 6th of February 2018, and at the time, Flash was still a core component of most browsers.<br>The vector of attack for this exploit originated via an error in the code module dealing with Media Player handling of listener objects. </p><p>A pointer was used in the code to reference a specific memory address. After this memory is freed, and allocated to another pointer, the original pointer was not freed correctly (IE Probably just set to “” instead of NULL), and thus deferencing this pointer points to somewhere within the new allocation, and corrupts the memory contained within the address.</p><p>This corruption can be manipulated into pointing instead to valid memory address, which could contain the location of valid shellcode, thus allowing the execution or arbitrary code remotely.    </p><p>This exploit was leveraged via an Encapsulated PostScript (EPS) object that was found within a word processor document. The shellcode connects and downloads a payload called ROKRAT from an internet source,<br>disguised as .jpg files.</p><h3 id="The-ROKRAT-Payload"><a href="#The-ROKRAT-Payload" class="headerlink" title="The ROKRAT Payload"></a>The ROKRAT Payload</h3><p>ROKRAT was a HTTP based payload that gathered information about the victim such as keystrokes (via a Keylogger), Running processes, Machine information and<br>BIOS information.<br>It also listened to the attacker’s social media for commands, and was able to receive orders by checking the last message on a Twitter timeline. </p><p>The orders could be either execute a command, move a file, remove a file, kill a process or download and execute a file. </p><p>Yandex, a Russian internet platform was also used by the attackers in this payload as a source of downloadable/executable files as well as the destination to<br>upload any stolen documents.</p><p>Mediafire, a file hosting platform, was used in the same way as Yandex.</p><p>ROKRAT’s impact was significant due to being a completely HTTP based RAT. This is in contrast to a typical RAT which communicates via RDP (Remote Desktop Protocol), which can<br>easily be identified by a corporate firewall and blocked naturally. The 3 social media avenues that ROKRAT used would seldom be blocked by corporate policies, as companies<br>may have a justifiable business case in the use of these networks.</p><h3 id="Forensic-Analysis"><a href="#Forensic-Analysis" class="headerlink" title="Forensic Analysis"></a>Forensic Analysis</h3><p>ROKRAT actively attempted to hide from analysis by running a fake subroutine if it detected a running process that was flagged.</p><p>These flagged processes are below:</p><p><img src="/media/images/rokrat.png" alt="ROKRAT processes"></p><p>If ROKRAT detected any of these processes running, then it would generate fake HTTP traffic by sending HTTP GET requests to 2 sources:<br>.<em> <a href="https://www[.]amazon[.]com/Men-War-PC/dp/B001QZGVEC/EsoftTeam/watchcom.jpg" target="_blank" rel="noopener">https://www[.]amazon[.]com/Men-War-PC/dp/B001QZGVEC/EsoftTeam/watchcom.jpg</a><br>.</em> <a href="http://www[.]hulu[.]com/watch/559035/episode3.mp4" target="_blank" rel="noopener">http://www[.]hulu[.]com/watch/559035/episode3.mp4</a></p><p>These would display a image from an Amazon game called Men of War, whilst the Hulu URL would attempt to stream an episode of an anime called Golden Time.</p><p>It is thought that the purpose of this fake subroutine would be to trick any surface level analysis, or network logging done on the host machine.<br>Sources<br><a href="https://blog.talosintelligence.com/2018/02/group-123-goes-wild.html&quot;&gt;https://blog.talosintelligence.com/2018/02/group-123-goes-wild.html" target="_blank" rel="noopener">https://blog.talosintelligence.com/2018/02/group-123-goes-wild.html&quot;&gt;https://blog.talosintelligence.com/2018/02/group-123-goes-wild.html</a><br><a href="https://www.nccgroup.trust/uk/about-us/newsroom-and-events/blogs/2018/november/rokrat-analysis/&quot;&gt;https://www.nccgroup.trust/uk/about-us/newsroom-and-events/blogs/2018/november/rokrat-analysis/" target="_blank" rel="noopener">https://www.nccgroup.trust/uk/about-us/newsroom-and-events/blogs/2018/november/rokrat-analysis/&quot;&gt;https://www.nccgroup.trust/uk/about-us/newsroom-and-events/blogs/2018/november/rokrat-analysis/</a><br><a href="https://blog.talosintelligence.com/2017/04/introducing-rokrat.html&quot;&gt;https://blog.talosintelligence.com/2017/04/introducing-rokrat.html" target="_blank" rel="noopener">https://blog.talosintelligence.com/2017/04/introducing-rokrat.html&quot;&gt;https://blog.talosintelligence.com/2017/04/introducing-rokrat.html</a><br><a href="http://cwe.mitre.org/data/definitions/416.html&quot;&gt;http://cwe.mitre.org/data/definitions/416.html" target="_blank" rel="noopener">http://cwe.mitre.org/data/definitions/416.html&quot;&gt;http://cwe.mitre.org/data/definitions/416.html</a><br><a href="https://nvd.nist.gov/vuln/detail/CVE-2018-4878#vulnCurrentDescriptionTitle&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2018-4878#vulnCurrentDescriptionTitle" target="_blank" rel="noopener">https://nvd.nist.gov/vuln/detail/CVE-2018-4878#vulnCurrentDescriptionTitle&quot;&gt;https://nvd.nist.gov/vuln/detail/CVE-2018-4878#vulnCurrentDescriptionTitle</a></p>]]></content>
       
       
       <categories>

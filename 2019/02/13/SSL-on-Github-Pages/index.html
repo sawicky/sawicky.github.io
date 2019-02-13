@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>SSL-on-Github-Pages | sawicky&#39;s space</title>
+  <meta name="author" content="David Sawick">
+
+  
+  <meta name="description" content="Installing SSL on a Github/Gitlab pages static webpageFebruary 6, 2019, 12:37 PMGithub offers a student education pack, and within that pack also offe">
+  
+  
+
+  <link rel="alternate" href="/atom.xml" title="sawicky&#39;s space" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head></html>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">home</a></li>
+    
+      <li><a href="/archives">archive</a></li>
+    
+      <li><a href="/tags">tags</a></li>
+    
+      <li><a href="/ctf">ctf</a></li>
+    
+      <li><a href="/about">about</a></li>
+    
+      <li><a href="/portfolio">portfolio</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">SSL-on-Github-Pages</h1>
+  
+
+    <time datetime="2019-02-13T10:53:17.000Z">
+  <span class="day">13</span><span class="month">Feb</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h2 id="Installing-SSL-on-a-Github-Gitlab-pages-static-webpage"><a href="#Installing-SSL-on-a-Github-Gitlab-pages-static-webpage" class="headerlink" title="Installing SSL on a Github/Gitlab pages static webpage"></a>Installing SSL on a Github/Gitlab pages static webpage</h2><h5 id="February-6-2019-12-37-PM"><a href="#February-6-2019-12-37-PM" class="headerlink" title="February 6, 2019, 12:37 PM"></a>February 6, 2019, 12:37 PM</h5><p>Github offers a student education pack, and within that pack also offers 1 free year’s registration on a customized .me TLD alongside a free year of SSL certification.<br>Sounds great right?<br>The problem is, Github is not a web hosting platform and only hosts static web pages at a bare minimum capacity, which means theres no real way to use that SSL certification if you’re using Github hosting. </p>
+<p>You’re going to have to rely on some other service to provide an SSL redirect for you, which namecheap doesn’t provide. </p>
+<p>One such service is Cloudflare, which lets you register a single website for free, which will provide a SSL activated nameserver for your domain, which means for a browser to connect your websites name to an IP address, It’ll ask Cloudflare first.</p>
+<ol>
+<li>Register an account for Cloudflare <a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">here</a></li>
+<li>Put your .me or .github.io link in the next box<br><img src="/media/images/addsite.jpg" alt="Add your site here"></li>
+<li><p>Let CloudFlare scan current DNS records associated with the domain name, and confirm if they look correct (Look at your Namecheap panel to confirm)</p>
+</li>
+<li><p>Click the free plan, and continue once you see the new records it will apply</p>
+</li>
+<li><p>CloudFlare will then give you 2 nameservers that you’ll need to apply to your registrar (Namecheap in this case) so name resolution requests will go through CloudFlare services instead<br><img src="/media/images/ns.jpg" alt="Your actual nameserver names may be different"></p>
+</li>
+<li><p>Now, pop over to your Namecheap control panel Advanced DNS section<br><img src="/media/images/record.jpg" alt=""></p>
+</li>
+<li><p>Now, replace every CNAME and A record currenty in (but leave MX alone) with this: </p>
+<ul>
+<li>A record for @ pointing to 185.199.108.153 </li>
+<li>A record for @ pointing to 185.199.109.153 </li>
+<li>A record for @ pointing to 185.199.110.153 </li>
+<li>A record for @ pointing to 185.199.111.153 </li>
+<li>CNAME record for www pointing to your username.github.io or username.me domain</li>
+</ul>
+</li>
+<li><p>Save your progress, and head on over to the Nameservers section in your control panel<br><img src="/media/images/editns.jpg" alt=""></p>
+</li>
+<li><p>Choose Custom DNS, and enter the 2 CloudFlare nameservers that were given to you earlier<br><img src="/media/images/editns2.jpg" alt=""></p>
+</li>
+<li><p>After this, you should be all done! Nameserver updates take around an hour, but eventually you’ll be able to access your .me domain with SSL enabled</p>
+</li>
+</ol>
+
+    
+    
+    <footer class="meta">
+      
+  <div class="cats">
+<a href="/categories/Tutorials/">Tutorials</a></div>
+
+      
+  <div class="tags">
+<a href="/tags/SSL/">SSL</a><a href="/tags/Github/">Github</a><a href="/tags/Hosting/">Hosting</a></div>
+
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2019 David Sawick
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/js/phasebeam.js"></script>
+</body>
+</html>

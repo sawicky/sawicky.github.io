@@ -53,6 +53,24 @@ strong {
   width: 1000px;
   z-index: 0;
 }
+.row {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
+}
+.column {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -o-box-flex: 1;
+  box-flex: 1;
+  -webkit-flex: 33.33%;
+  -ms-flex: 33.33%;
+  flex: 33.33%;
+  padding: 5px;
+}
 #header {
   height: 70px;
   padding: 50px 0;
