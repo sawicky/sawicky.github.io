@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>UTS Cyber Security Problem Statement | sawicky&#39;s space</title>
+  <meta name="author" content="David Sawick">
+
+  
+  <meta name="description" content="Creating a self-hosted vulnerable web targetLast semester, I completed a Software Engineering project and wrote a Node-js app called Mastodon. It was ">
+  
+  
+
+  <link rel="alternate" href="/atom.xml" title="sawicky&#39;s space" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head></html>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">home</a></li>
+    
+      <li><a href="/archives">archive</a></li>
+    
+      <li><a href="/tags">tags</a></li>
+    
+      <li><a href="/ctf">ctf</a></li>
+    
+      <li><a href="/about">about</a></li>
+    
+      <li><a href="/portfolio">portfolio</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">UTS Cyber Security Problem Statement</h1>
+  
+
+    <time datetime="2019-02-14T11:50:59.000Z">
+  <span class="day">14</span><span class="month">Feb</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h3 id="Creating-a-self-hosted-vulnerable-web-target"><a href="#Creating-a-self-hosted-vulnerable-web-target" class="headerlink" title="Creating a self-hosted vulnerable web target"></a>Creating a self-hosted vulnerable web target</h3><p>Last semester, I completed a Software Engineering project and wrote a Node-js app called Mastodon. It was intended to be a UTS registration portal for booking medical appointments with in-faculty medical staff or medical students, as currently the only way to book an appointment is to call a helpline, which can only be reached during business hours.</p>
+<p>The app runs on Node.JS, with no middleware and Mongo for it’s record collection.<br>After researching web exploitation, and understanding that a vast majority of web-related attacks are XSS based, it has helped me formulate a plan to attack my own system using a variety of XSS attacks and tools.</p>
+<p>This can be a strong learning experience, as the app itself was not designed for security in mind barring basic input validation. I have the advantage of knowing exactly how the application is structured internally, and in case I ever get stuck, the app will be hosted on a private VPS that I can share to the class and ask them to rip it apart. I can then check logs to see exactly what damaged they did, and potentially find out how.</p>
+<p>Initial research has brought me to focus on 2 main tools:</p>
+<ul>
+<li>Burpsuite, which I have covered a little bit already on my Hack The Box progress</li>
+<li>BeEF, which is a brand new tool I have 0 experience with, and am invested to learn about.</li>
+</ul>
+<p>The application was constructed after a mentor reviewed design process and Software development lifecycle, which means that this could potentially be a pretty accurate representation of a lower-tier hosted web app, such as a small time shop or blog, that hasn’t had the privilege of an experienced developer who knows how to properly secure a website.</p>
+
+    
+    
+    <footer class="meta">
+      
+  <div class="cats">
+<a href="/categories/security/">security</a></div>
+
+      
+  <div class="tags">
+<a href="/tags/security/">security</a><a href="/tags/training/">training</a><a href="/tags/xss/">xss</a></div>
+
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2019 David Sawick
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/js/phasebeam.js"></script>
+</body>
+</html>

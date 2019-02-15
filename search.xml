@@ -4,6 +4,62 @@
   
     
     <entry>
+      <title>UTS Cyber Security Problem Statement</title>
+      <link href="/2019/02/14/UTS-Cyber-Security-Problem-Statement/"/>
+      <url>/2019/02/14/UTS-Cyber-Security-Problem-Statement/</url>
+      
+        <content type="html"><![CDATA[<h3 id="Creating-a-self-hosted-vulnerable-web-target"><a href="#Creating-a-self-hosted-vulnerable-web-target" class="headerlink" title="Creating a self-hosted vulnerable web target"></a>Creating a self-hosted vulnerable web target</h3><p>Last semester, I completed a Software Engineering project and wrote a Node-js app called Mastodon. It was intended to be a UTS registration portal for booking medical appointments with in-faculty medical staff or medical students, as currently the only way to book an appointment is to call a helpline, which can only be reached during business hours.</p><p>The app runs on Node.JS, with no middleware and Mongo for it’s record collection.<br>After researching web exploitation, and understanding that a vast majority of web-related attacks are XSS based, it has helped me formulate a plan to attack my own system using a variety of XSS attacks and tools.</p><p>This can be a strong learning experience, as the app itself was not designed for security in mind barring basic input validation. I have the advantage of knowing exactly how the application is structured internally, and in case I ever get stuck, the app will be hosted on a private VPS that I can share to the class and ask them to rip it apart. I can then check logs to see exactly what damaged they did, and potentially find out how.</p><p>Initial research has brought me to focus on 2 main tools:</p><ul><li>Burpsuite, which I have covered a little bit already on my Hack The Box progress</li><li>BeEF, which is a brand new tool I have 0 experience with, and am invested to learn about.</li></ul><p>The application was constructed after a mentor reviewed design process and Software development lifecycle, which means that this could potentially be a pretty accurate representation of a lower-tier hosted web app, such as a small time shop or blog, that hasn’t had the privilege of an experienced developer who knows how to properly secure a website.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> security </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> security </tag>
+            
+            <tag> training </tag>
+            
+            <tag> xss </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>RDs and Bug Bounties</title>
+      <link href="/2019/02/14/RDs-and-Bug-Bounties/"/>
+      <url>/2019/02/14/RDs-and-Bug-Bounties/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Are-you-better-off-killing-insects-for-your-bug-bounties"><a href="#Are-you-better-off-killing-insects-for-your-bug-bounties" class="headerlink" title="Are you better off killing insects for your bug bounties?"></a>Are you better off killing insects for your bug bounties?</h2><h5 id="February-14-2019-8-53-PM"><a href="#February-14-2019-8-53-PM" class="headerlink" title="February 14, 2019, 8:53 PM"></a>February 14, 2019, 8:53 PM</h5><p>A bug bounty is a deal offered by companies in order to tempt security-versed individuals into breaking into their systems with various exploits and vulnerabilities.</p><a href="/media/images/huge-firebounty.jpg"><img src="/media/images/body-firebounty.jpg" alt="The FireBounty main page" title="Zerodium"></a><p>A good range of large companies actually do offer these bounties, there even exists some aggregation websites that will list a bunch of currently available bounties, ranging from $50 to $50,000, or some other questionable websites that will buy your 0 days for up to $2,000,000</p><a href="/media/images/huge-zerodium.png"><img src="/media/images/body-zerodium.png" alt="Zerodium Mobile 0day payouts" title="Zerodium"></a><p>On the flip side, some bug bounty programs exists, such as the Open Bug Bounty community, that relies on people to post whatever disclosure they want, and a good will system encouraging the affected website to pay the reporter.</p><a href="/media/images/huge-openbugbounty.png"><img src="/media/images/body-openbugbounty.png" alt="The open bug bounty form" title="Zerodium"></a><p>Ever since the release of the first bug bounty program in 1995, for the Netscape Navigator browser, there has been a generally positive outcome from these programs. Even the US Government’s Pentagon have their own version of a bug bounty,and in 1 month from April 18 to May 12, 138 unique security flaws were identified, and $71,200 was paid out.</p><a href="/media/images/huge-hackthepentagon.png"><img src="/media/images/body-hackthepentagon.png" alt="The success of Hack The Pentagon" title="Zerodium"></a><p>The only reason these bug bounties are successful is because they usually include a Reasonable Disclosure program.<br>An RD is an agreement between an exploiter and a vendor that the exploit is targeted to in where that vulnerability is only disclosed after a period of time that allows for that vulnerability to be patched. </p><p>A Reasonable Disclosure report format can be used for my Problem Statement in an attempt to emulate the documentation that security researcher or a whitehat will need to write up for any piece of work they may be doing.</p><h4 id="Sources"><a href="#Sources" class="headerlink" title="Sources:"></a>Sources:</h4><p><a href="https://www.mcafee.com/enterprise/en-au/threat-center/advanced-threat-research/disclosure.html" target="_blank" rel="noopener">https://www.mcafee.com/enterprise/en-au/threat-center/advanced-threat-research/disclosure.html</a><br><a href="https://www.cert.gov.au/critical-infrastructure-big-business/report-incident/vulnerability-disclosure-policy" target="_blank" rel="noopener">https://www.cert.gov.au/critical-infrastructure-big-business/report-incident/vulnerability-disclosure-policy</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> security </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> security </tag>
+            
+            <tag> reflections </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CTF Training</title>
       <link href="/2019/02/13/CTF-Training/"/>
       <url>/2019/02/13/CTF-Training/</url>
