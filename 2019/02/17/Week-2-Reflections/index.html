@@ -1,0 +1,138 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Week 2 Reflections | sawicky&#39;s space</title>
+  <meta name="author" content="David Sawick">
+
+  
+  <meta name="description" content="February 17 2019, 11:34 AMThis week in our Cyber Security studios, we focused a bit more on web application security and penetration, and having a lar">
+  
+  
+
+  <link rel="alternate" href="/atom.xml" title="sawicky&#39;s space" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head></html>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">home</a></li>
+    
+      <li><a href="/archives">archive</a></li>
+    
+      <li><a href="/tags">tags</a></li>
+    
+      <li><a href="/ctf">ctf</a></li>
+    
+      <li><a href="/about">about</a></li>
+    
+      <li><a href="/portfolio">portfolio</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Week 2 Reflections</h1>
+  
+
+    <time datetime="2019-02-17T00:02:13.000Z">
+  <span class="day">17</span><span class="month">Feb</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <h5 id="February-17-2019-11-34-AM"><a href="#February-17-2019-11-34-AM" class="headerlink" title="February 17 2019, 11:34 AM"></a>February 17 2019, 11:34 AM</h5><p>This week in our Cyber Security studios, we focused a bit more on web application security and penetration, and having a larger emphasis on the definition of our problem statement and the ultimate shape of our portfolio for this subject.</p>
+<p>This week I also started my first professional job, working as an Apex developer, which is the language used in Salesforce CRM products for a small startup, which is an incredibly different environment from working in Help Desk for a law firm generating $1 billion a year. I went from structure, including service management, specialized team management staff, incident management into being thrown in the deep end with an almost unused incident management system. Self study is needed to keep myself afloat in this new job, as while i’m experienced in programming Java already (of which Apex is very similar to), theres still a ton of new concepts that will take my limited time away.</p>
+<p>This sudden dissapearance of my free time, time that is meant to be commited to this subject, has cemented the idea that my time management strategy sucks (ie there is none), and the firsts steps I have taken to rectify this is to begin being more vocal in class if I need more insight in what is to be achieved during the week in terms of milestones, as I think a defined list of milestones is how I best operate.[5]</p>
+<p>An example of this would be spinning up my old VPS and Software Engineering Project, I had a talk with our tutors for cyber sec and I had the idea that I could use this project, insecure as it is, as my learning experience to achieve my SLOs. </p>
+<ul>
+<li>It’s a web application, so it fits in perfectly with the content we’ve been learning the past 2 weeks</li>
+<li>It wasn’t designed to be secure, which highlighted a problem with our SDLC</li>
+<li>I have good understanding of how the entire thing is structured, so nothing will be blind (I know where all the endpoints are, which saves a few hours (at my skill level) with burpsuite)</li>
+<li>I have root access to the server behind the application, so I can always have a look at logs [2][3]</li>
+</ul>
+<p>Another benefit, is that since it’s hosted on a private VPS that I signed a permission form for penetration testing, I could even see if I can pwn my own box as a change of pace.<br>This is still an ongoing idea, and more talk is needed with my tutors, as they ultimately know whether or not my application is viable or not. [1]</p>
+<h3 id="Progress-this-week"><a href="#Progress-this-week" class="headerlink" title="Progress this week"></a>Progress this week</h3><p>I started off this week (on Wednesday) by being asked to present a Problem Statement we have defined the week prior. I blame my poor time management in this case, as I didn’t have any presentation prepared, and my blog write up was still sitting undeployed on my home desktop. The second way I messed up was misinterpreting our tutor’s instructions earlier on how to define a problem statement. I know now that a Problem Statement is what you can present to some CEO of some company, define a problem, what it’ll affect (his bottom lines), and how you’ll fix it, all under 1 minute.</p>
+<p>Since I didn’t have any presentation prepared, I decided to accept my fate and talk about what I studied previously on the weekend, which was about why exactly XSS was so prevalent. You could formulate this to sound like an executive problem statement but I leaned on the technical side. </p>
+<p>By sheer luck, I wasn’t asked to present before the break, so during lunch I slapped together a quick presentation and talked about exactly why XSS was so prevalent. It’s prevalent because of DOM-based XSS attacks being the majority of xss attacks, since they rely solely on human failure by clicking on a crafted link, and exploiting raw text within the DOM processor of a browser. It’s much easier to sanitize stored and reflected XSS, but the threat of a DOM based xss attack is there if you have any user-influenced raw text displayed in a browser at all.</p>
+<p>So I talked about the why, the how and how to fix it, but didn’t talk much about what it might do, since I mistakenly made this a technical presentation, and assumed the audience knew what XSS does. I still managed to fit in the entirety of my presentation in 2:59 with a time limit of 3:00 so I’m happy with that.[4]</p>
+<p>I then studied by tackling a medium-hard level HackTheBox web challenge called I know Mag1k. I did a write up of it <a href="/ctf/htb/">here</a>.</p>
+<p>It exposed me to a whole new level of exploit involving an Oracle attack, new tools and a new path of enumeration for my further studies.</p>
+<h3 id="What’s-Next"><a href="#What’s-Next" class="headerlink" title="What’s Next"></a>What’s Next</h3><p>Next week we’re starting actual box pwning, which means I need to be ahead of it since I’ll also have some crazy work stress to deal with aswell. I need to catch up to Bandit 30, Natas 15 and hopefully pwn the Help machine on Hack the box. I’ll also end up asking the tutors at some point if they have any walkthroughs for retired machines.</p>
+<hr>
+<p>1: SLO 1<br>2: SLO 2<br>3: SLO 3<br>4: SLO 4<br>5: SLO 5</p>
+
+    
+    
+    <footer class="meta">
+      
+  <div class="cats">
+<a href="/categories/security/">security</a></div>
+
+      
+  <div class="tags">
+<a href="/tags/security/">security</a><a href="/tags/reflections/">reflections</a></div>
+
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2019 David Sawick
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/js/phasebeam.js"></script>
+</body>
+</html>
