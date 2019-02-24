@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>Week 3 Reflections3 | sawicky&#39;s space</title>
+  <meta name="author" content="David Sawick">
+
+  
+  <meta name="description" content="February 24 2019, 7:50 PMThis week in our Cyber Security studios, we focused on the actual penetration of real machines, including learning more steps">
+  
+  
+
+  <link rel="alternate" href="/atom.xml" title="sawicky&#39;s space" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head></html>
+
+<body>
+  <header id="header" class="inner"><nav>
+  <ul>
+    
+      <li><a href="/">home</a></li>
+    
+      <li><a href="/archives">archive</a></li>
+    
+      <li><a href="/ctf">ctf</a></li>
+    
+      <li><a href="/pwn">pwn</a></li>
+    
+      <li><a href="/about">about</a></li>
+    
+      <li><a href="/portfolio">portfolio</a></li>
+    
+  </ul>
+</nav></header>
+  <div id="content" class="inner"><article class="post">
+  
+    <div class="gallery">
+  <div class="photoset">
+    
+      <img src="">
+    
+  </div>
+  <div class="control">
+    <div class="prev"></div>
+    <div class="next"></div>
+  </div>
+</div>
+  
+  <header>
+    
+  
+    <h1 class="title">Week 3 Reflections3</h1>
+  
+
+    <time datetime="2019-02-24T08:50:04.000Z">
+  <span class="day">24</span><span class="month">Feb</span>
+</time>
+  </header>
+  <div class="entry-content">
+    
+      <p><img src="https://www.hackthebox.eu/badge/image/105856" alt="Hack The Box"></p>
+<h5 id="February-24-2019-7-50-PM"><a href="#February-24-2019-7-50-PM" class="headerlink" title="February 24 2019, 7:50 PM"></a>February 24 2019, 7:50 PM</h5><p>This week in our Cyber Security studios, we focused on the actual penetration of real machines, including learning more steps of enumeration, a real-world example of a pentest job via the ApointB web application and an example VM from Deloitte.</p>
+<p>In keeping up with this week’s theme, I managed to crack 4 boxes on HackTheBox (Chaos, Curling, Teacher, Irked) and have some significant progress on Carrier. There are 2 pretty easy boxes in there (Curling, Irked) but the other 3 are around the mid level, and I have learned or am learning an absolute ton about enumeration in the progress, as theres nothing too technical or challenging in these boxes, just testing how thorough your enumeration is. A big reason why I didn’t manage to beat Carrier yet is because it keeps getting DoS’d either intentionally or otherwise by other users on the free server, as the first step involves some pretty serious dirbuster and UDP scanning, which I guess takes it’s toll. I managed to get admin credentials on the web app and found a possible vector for remote code execution, but navigating any further just led to timeouts. Sad.</p>
+<p>The sheer fact that I was able to do 4.5 boxes in this week alone after having started from 0 when I started this course is a really great feeling. I’m getting positive feedback during class aswell, and having great chats with other students in the class. My tutors and the other students have been probably the number 1 influence on my learning and motivation, and it feels great having them there. I left a quick SFS feedback saying out of the 5 years of Uni i’ve done, this class was definately the most enjoyable. I feel like i’ve been able to manage my time well, but theres still the big hurdle of the portfolio+next weeks deliverables that I haven’t started with yet, so i’ll probably have to be a little more humbled and focused to try and nail that part [5]</p>
+<p>As a group, we were tasked to present about a skiddie tool we researched, it’s effects, purpose and how to use it, however I was absent on class on that day. I did try to contribute in a little way by writing 2 slides, but that tool (BeEF) was so interesting to me when I was studying it, and I had a lot to share. I trusted my team to do a good joob regardless, which they did, so in the end it wasn’t all that bad.</p>
+<h3 id="In-Class"><a href="#In-Class" class="headerlink" title="In Class"></a>In Class</h3><p>In class on Friday, I was met with Shaun from ApointB, who was happy that I found a bug in their web application that leaked the entire database of users information. He seemed very well versed in the business strategy side of security vulnerabilities, and explained to me that while that bug wasn’t a huge security flaw, it definately needs to be fixed as it creates a big hole in their app for others to do recon on. Shaun explained to me that if some competitor was to find this database, all they’d have to do is call up each of the users in that list, and provide them a competetive offer to the software solution that ApointB offers them. I never really thought about this, and was grateful that Shaun could provide me a little perspective from the business side of things, as a SOC analyst is going to have to provide these sorts of discussions to a client or management in order to justify some work. </p>
+<p>I may have surprised Shaun a little bit when I talked about the next attack I tried - I registered the account <a href="mailto:&#39;rupport@apointb.com" target="_blank" rel="noopener">&#39;rupport@apointb.com</a>‘ with 0 verification using that email domain, and attempted a session cookie bitflipper attack, in where I tried to bruteforce my cookie to hopefully provide me the session token for <a href="mailto:&#39;support@apointb.com" target="_blank" rel="noopener">&#39;support@apointb.com</a>‘, which I assumed to be an administrator account. This wasn’t successful, but we still had a chat that perhaps the registration of accounts with email domains that you don’t have access to should be looked at. </p>
+<p>Shaun also provided me some new vectors of exploitation to try, including possibly linking a custom domain to the ApointB nameservers and finding a vulnerability in that fashion, as well as closing the possibility of bruteforcing the list of possible admin accounts, as they have all been passworded using LastPass, which cannot be bruteforced. </p>
+<p>In conclusion to the ApointB challenge, I learned a lot about business strategy in dealing with security vulnerabilities, my first experience in writing documentation of the flaws that I did find, and what I did try and failed at, and at the same time had a lot of fun doing so. [1][2][3]</p>
+<hr>
+<p>I had a crack at the Deloitte VM aswell, which taught be a few things about popular SSL vulnerabilities, especially heartbleed.<br>My initial enumeration of the Deloitte VM led to some of my SSL enum scripts detecting that the machine may be vulnerable to CRIME, which is a rabbit hole that I willingly dove deep into. It sucked out a lot of hours trying to figure out how to exploit CRIME, as it was more than just a metasploit moduel.</p>
+<p>I asked Jai for help, and he confirmed that it wasn’t CRIME, but another one, and that it could be found on metasploit. My 2 options here were Heartbleed and some sort of oracle attack. I assumed it was heartbleed, as when I ran the exploit, a result came back saying [Leaked]. I was a bit confused, as there was no other output, so I asked Jai for help again and he suggested the dump option. I guessed that my metasploit was setup incorrectly, or maybe Heartbleed was another rabbit hole as that option still did not do anything, so I left it for Friday.[4]</p>
+<p>In Friday’s class, I asked Jason if the commands I used was meant to work, and he said yes, and told me to dump the output. Again the dumping option did nothing for me, so I looked at the documentation for metasploit. There was a global variable called verbose that I could set to true, so I set that, ran Heartbleed again, and I finally had some output. [4]</p>
+<p>Unfortunately, since I ran a bunch of enum scripts on the Deloitte VM, the heartbleed output didn’t show anything worthwhile, so I had to convince it to show relevant output again by launching a POST on the login page, then running heartbleed after. I got my credentials, and getting root after that was easy.</p>
+<p>These little things, alongside my breaking of the HTB machines, has taught me to slow down and be thorough on my enumeration and process. I could have rooted the box within a few minutes on Wednesday, but because I rushed straight into it, and didn’t think about anything else once I had the slightest idea of one method messed me up and slowed me down in the end.[5]</p>
+<hr>
+<p>I’m not going to write up my walkthroughs for Curling or Irked, even though they did trip me up (Especially root on Irked - I have never dealt with SUID bits before, and that was an interesting introduction to it), as they are pretty simple, but I plan to crack Carrier this week at some point when it’s less busy on the free servers, and I’m sure it’s going to teach me a ton about lateral traversal, a brush up on networking and linux networking administration. I have written a write up on the Teacher machine, and right now am trying to figure out how best to format it in a PDF and password protect it.</p>
+<hr>
+<p>1: SLO 1<br>2: SLO 2<br>3: SLO 3<br>4: SLO 4<br>5: SLO 5</p>
+
+    
+    
+    <footer class="meta">
+      
+  <div class="cats">
+<a href="/categories/security/">security</a></div>
+
+      
+  <div class="tags">
+<a href="/tags/security/">security</a><a href="/tags/reflections/">reflections</a></div>
+
+      
+    </footer>
+    
+  </div>
+  
+</article></div>
+  <footer id="footer" class="inner"><div class="social alignright">
+  
+  
+  
+  
+  <a class="rss" href="/atom.xml" title="RSS">RSS</a>
+</div>
+<p>
+  
+  &copy; 2019 David Sawick
+  
+</p>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+<div id="phasebeam">
+  <canvas></canvas>
+  <canvas></canvas>
+  <canvas></canvas>
+</div>
+<script src="/js/phasebeam.js"></script>
+</body>
+</html>
