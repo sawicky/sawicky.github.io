@@ -79,7 +79,15 @@
 <p>The structure of this command is as follows:</p>
 <p><code>-sV</code> - A parameter that lets us view the <strong>V</strong>ersion of any <strong>s</strong>ervices it is running.<br><code>-v</code> - Run in <strong>v</strong>erbose mode, which tells the program to output more information than normal back to us while running, including non critical things like status of the operation, problems etc.</p>
 <p><code>-T4</code> - Run the program with <strong>4</strong> <strong>T</strong>hreads. A thread is similar to a lane of traffic of a highway, but for the CPU of the computer. This parameter lets us run the command using 4 lanes of traffic, which can help parallelize and quicken the operation.</p>
-<p><code>-A</code></p>
+<p><code>-A</code> - <strong>A</strong>ttempt to gather information about the OS, including OS name, version, traceroute and potential scripts running</p>
+<p>The output of the command may look something similar to this:</p>
+<a href="/media/images/report/huge-2.png"><img src="/media/images/report/body-2.png" alt="Expand Image" title="NMAP"></a>
+<p>Straight away we can see that there is an open TCP port at port 80. From experience, I know that this is the port that HTTP traffic communicates on AKA the tangible internet that we can access via a web browser. This means, if we type in <a href="http://10.10.10.153" target="_blank" rel="noopener">http://10.10.10.153</a> into a web browser, we should be able to see what that web server is offering us.</p>
+<a href="/media/images/report/huge-3.png"><img src="/media/images/report/body-3.png" alt="Expand Image" title="Website"></a>
+<p>Great - We have a public facing website. We can then use some more reconnaissance tools such as Dirbuster to guess at which else comes after 10.10.10.153/ so we can laterally traverse the website without having any knowledge of it.<br>Dirbuster usually requires a wordlist, which is essentially a large text file containing the most popular variations of page names, and then begins guessing and trying to reach those pages. If it fails, then the web server will simply display a 404 error, which means the requested content was not found. If Dirbuster guesses right, it’ll let us know.</p>
+<p>We can use dirbuster in the following way:<br><code>dirb http://10.10.10.153 /usr/share/wordlists/dirb/common.txt</code><br>This will use the ‘common’ wordlist, which contains maybe 3000 different variations. If time is not a problem, you could opt for an even larger wordlist.<br>After a few minutes, dirbuster can reveal some interesting information:</p>
+<a href="/media/images/report/huge-4.png"><img src="/media/images/report/body-4.png" alt="Expand Image" title="Moodle"></a>
+<p>Dirbuster has found a moodle page, which is something that we would not be able to find via the front page of that website if we looked.<br>Moodle is a piece of software running somewhere on that web server. A piece of software that is likely to have vulnerabilities, which it’s now time to scan.</p>
 <h3 id="Vulnerability-Scanning"><a href="#Vulnerability-Scanning" class="headerlink" title="Vulnerability Scanning"></a>Vulnerability Scanning</h3><h3 id="Exploitation"><a href="#Exploitation" class="headerlink" title="Exploitation"></a>Exploitation</h3><h3 id="Mitigation"><a href="#Mitigation" class="headerlink" title="Mitigation"></a>Mitigation</h3>
     
     
